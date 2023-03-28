@@ -12,11 +12,11 @@ const Particlescomponent = () =>{
         await console.log(container);
     }, []);
     const options ={
-        fpsLimit: 60,
+        fpsLimit: 30,
         interactivity: {
             events: {
                 onHover: {
-                    enable: true,
+                    enable: false,
                     mode: "repulse",
                 },
                 resize: true,

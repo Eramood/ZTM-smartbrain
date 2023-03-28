@@ -5,6 +5,7 @@ import Urlimg from './components/Urlimg/Urlimg'
 import Rank from './components/Rank/Rank';
 import Particles from './components/Particles/Particles';
 import Facereco from './components/Facereco/Facereco'
+import Signin from './components/Signin/Signin';
 import './App.css';
 
 const PAT = 'PERSONAL TOKEN'; //put here you personal token access of clarifai
@@ -17,6 +18,7 @@ class App extends Component{
       input:'',
       imgURL:'',
       box: {},
+      route:'signin'
     }
   }
 
@@ -34,8 +36,7 @@ class App extends Component{
   }
 
   displaybox=(box)=>{
-    console.log(box);
-    this.setState({box:box})
+    this.setState({box:box});
   }
 
 
@@ -77,16 +78,27 @@ class App extends Component{
     .catch(error => console.log('error', error));
   }
 
+  //this funcion change the state of route
+  routeChange=(route)=>{
+    this.setState({route:route});
+  } 
+
 
   render() {
     return (
       <div className="App">
-        <Navigation />
         <Particles />
-        <Logo />
-        <Rank />
-        <Urlimg onInputChange={this.onInputChange} onButtonSubmit={this.onButtonSubmit}/>
-        <Facereco box={this.state.box}  imgURL={this.state.imgURL} />
+        <Navigation routeChange={this.routeChange}/>
+        { this.state.route === 'signin' ? //if route state is signin read signin else skip the signin form
+        <Signin routeChange={this.routeChange}/>
+              :
+        <div>
+          <Logo />
+          <Rank />
+          <Urlimg onInputChange={this.onInputChange} onButtonSubmit={this.onButtonSubmit}/>
+          <Facereco box={this.state.box}  imgURL={this.state.imgURL} />
+        </div>
+        }
       </div>
     );
   }
