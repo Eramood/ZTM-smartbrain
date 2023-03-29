@@ -6,6 +6,7 @@ import Rank from './components/Rank/Rank';
 import Particles from './components/Particles/Particles';
 import Facereco from './components/Facereco/Facereco'
 import Signin from './components/Signin/Signin';
+import Register from './components/Register/Register';
 import './App.css';
 
 const PAT = 'PERSONAL TOKEN'; //put here you personal token access of clarifai
@@ -18,7 +19,8 @@ class App extends Component{
       input:'',
       imgURL:'',
       box: {},
-      route:'signin'
+      route:'signin',
+      signedin : false   //use this inside navigation to check what nav bar is need to render
     }
   }
 
@@ -80,6 +82,11 @@ class App extends Component{
 
   //this funcion change the state of route
   routeChange=(route)=>{
+    if(route === 'signout'){
+      this.setState({signedin:false})
+    }else if(route === 'home'){
+      this.setState({signedin:true})
+    }
     this.setState({route:route});
   } 
 
@@ -88,16 +95,20 @@ class App extends Component{
     return (
       <div className="App">
         <Particles />
-        <Navigation routeChange={this.routeChange}/>
-        { this.state.route === 'signin' ? //if route state is signin read signin else skip the signin form
+        <Navigation routeChange={this.routeChange} signedin={this.state.signedin} />
+        { 
+        this.state.route === 'home' ? 
+      <div>
+        <Logo />
+        <Rank />
+        <Urlimg onInputChange={this.onInputChange} onButtonSubmit={this.onButtonSubmit}/>
+        <Facereco box={this.state.box}  imgURL={this.state.imgURL} />
+      </div>
+      : (this.state.route === 'signin' ?
         <Signin routeChange={this.routeChange}/>
-              :
-        <div>
-          <Logo />
-          <Rank />
-          <Urlimg onInputChange={this.onInputChange} onButtonSubmit={this.onButtonSubmit}/>
-          <Facereco box={this.state.box}  imgURL={this.state.imgURL} />
-        </div>
+        :
+        <Register routeChange={this.routeChange}/>
+        )
         }
       </div>
     );
